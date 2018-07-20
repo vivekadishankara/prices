@@ -12,17 +12,33 @@ class Element(object):
         self.locator = locator
         self.timeout = timeout
 
-    def set_sub_elements(self, subs:dict):
+    def set_sub_elements(self, **kwargs):
         """
         TODO: adding subs considering self.sub_elements already has some elements
         :subs: example = {'example1': (By.ID, 'example')}
         """
-        self.sub_elements = subs
+        if self.by == By.XPATH:
+            try:
+                for k,v in kwargs.items():
+                    self.sub_elements[k] = v
+            except AttributeError:
+                self.sub_elements = kwargs
+        return None
 
     def get_sub_element(self, sub):
-        element = self.find_element()
-        sub_element = element.find_element(*self.sub_elements.get(sub))
-        return sub_element
+        if self.by == By.XPATH:
+            locator = self.locator + self.sub_elements.get(sub)
+            sub_element = Element(self.by, locator)
+            return sub_element
+        else:
+            return None
+
+    def get_sub_locator(self, sub):
+        if self.by == By.XPATH:
+            locator = self.locator + self.sub_elements.get(sub)
+            return locator
+        else:
+            return None
 
     def find_element(self):
         element = driver.find_element(self.by, self.locator)
@@ -98,7 +114,7 @@ class Elements(Element):
         element = Element(self.by, locator_item)
         try:
             if self.sub_elements is not None:
-                element.set_sub_elements(self.sub_elements)
+                element.set_sub_elements(**self.sub_elements)
         except AttributeError:
             pass
         return element
