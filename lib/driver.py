@@ -25,6 +25,7 @@ class Driver(object):
                 self.options.add_argument('--headless')
             self.driver = webdriver.Firefox(executable_path=self.path, capabilities=self.capabilities,
                                             firefox_profile=self.profile, options=self.options)
+            self.maximize_window()
 
     def get_driver(self):
         return self.driver
@@ -40,6 +41,9 @@ class Driver(object):
 
     def take_screenshot(self, name=''):
         self.driver.save_screenshot('./images/'+name+datetime.datetime.now().strftime('%Y_%m_%d_(%H_%M).png'))
+
+    def get_current_window_handle(self):
+        return self.driver.current_window_handle
 
     def get_window_handles(self):
         return self.driver.window_handles

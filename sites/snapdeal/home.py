@@ -5,7 +5,6 @@ from sites.snapdeal.results import Results
 from sites.snapdeal.product import Product
 from commons.functions import CommonFunctions
 from selenium.common.exceptions import NoSuchElementException
-from globals import *
 
 
 class Snapdeal(Page):

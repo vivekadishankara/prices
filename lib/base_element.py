@@ -14,8 +14,7 @@ class Element(object):
 
     def set_sub_elements(self, **kwargs):
         """
-        TODO: adding subs considering self.sub_elements already has some elements
-        :subs: example = {'example1': (By.ID, 'example')}
+        :kwargs: example = example1='//*[text()='example']}
         """
         if self.by == By.XPATH:
             try:
@@ -104,6 +103,16 @@ class Element(object):
         self.wait_for_click()
         element = self.find_element()
         element.click()
+
+    def __repr__(self):
+        string = super(Element, self).__repr__().split()
+        ins = "({0}, {1})".format(self.by, self.locator)
+        string.insert(1, ins)
+        return ' '.join(string)
+
+    def __str__(self):
+        return "Element ({0}, {1})".format(self.by, self.locator)
+
 
 class Elements(Element):
     def __init__(self, xpath, timeout=TIMEOUT):
