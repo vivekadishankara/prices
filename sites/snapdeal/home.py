@@ -27,7 +27,7 @@ class Snapdeal(Page):
                 try:
                     element = result.get_sub_element(key)
                     if key == 'link':
-                        one[key] = cls.url + element.get_attribute('href')
+                        one[key] = element.get_attribute('href')
                     elif key == 'stars':
                         if element.wait_element(2):
                             element = result.get_sub_element('link')
