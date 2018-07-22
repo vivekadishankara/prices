@@ -108,6 +108,7 @@ class Element(object):
 class Elements(Element):
     def __init__(self, xpath, timeout=TIMEOUT):
         super(Elements, self).__init__(By.XPATH, xpath, timeout)
+        self.i = 0
 
     def __getitem__(self, item):
         locator_item = '(' + self.locator + ')[' + str(item) + ']'
@@ -124,5 +125,9 @@ class Elements(Element):
         return len(elements)
 
     def __iter__(self):
-        for i in range(1, len(self)+1):
-            yield self[i]
+        while(True):
+            self.i += 1
+            if self[self.i].wait_element():
+                yield self[self.i]
+            else:
+                raise StopIteration
