@@ -9,5 +9,6 @@ class Results:
         image="//a//img",
         price="//a[3]/div/div",
         stars="//span[contains(@id, 'productRating')]/div",  #example: '4.2 *'
-        reviews_num="//div[2]/span[2]"    #example: (3,19,899)
+        reviews_num="//div[2]/span[2]",    #example: (3,19,899)
+        link="//a[2]"
     )
