@@ -6,19 +6,12 @@ from globals import *
 
 driver.start_driver()
 item = 'Redmi 5'
-Amazon.navigate()
-results = Amazon.search_results(item)
-
-Flipkart.navigate()
-Flipkart.close_notification()
-results += Flipkart.search_results(item)
-
-Snapdeal.navigate()
-results += Snapdeal.search_results(item)
 
 fp = 'results'
 with open(fp, 'w') as f:
-    for result in results:
-        f.write(str(result)+'\n')
+    for cls in [Amazon, Flipkart, Snapdeal]:
+        cls.navigate()
+        for result in cls.search_results(item):
+            f.write(str(result)+'\n')
 
 driver.quit()

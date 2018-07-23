@@ -15,6 +15,11 @@ class Flipkart(Page):
     results_page = Results()
 
     @classmethod
+    def navigate(cls):
+        super(Flipkart, cls).navigate()
+        cls.close_notification()
+
+    @classmethod
     def search_results(cls, item):
         CommonFunctions.search(cls, item)
         results = []
