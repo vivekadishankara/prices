@@ -1,20 +1,26 @@
-from globals import *
+"""
+This module contains the CommonFunctions class which is a collection of common functions which
+can be used in the entire module
+"""
+from selenium.webdriver.common.keys import Keys
+from lib.driver import driver
+
 
 class CommonFunctions(object):
     """
     This class is a collections of common functions that can be used throughout the module
     """
     @staticmethod
-    def search(cls, term):
+    def search(page_cls, term):
         """
         Enters a term in the search box and clicks the search_button
-        :param cls: Class having the necessary member elements
+        :param page_cls: Class having the necessary member elements
         :param term: term to be searched
         :return: None
         """
-        cls.search_box.wait_element()
-        cls.search_box.set_text(term)
-        cls.search_button.click()
+        page_cls.search_box.wait_element()
+        page_cls.search_box.set_text(term)
+        page_cls.search_button.click()
 
     @staticmethod
     def open_in_new_tab(element):

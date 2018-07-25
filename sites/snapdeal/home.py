@@ -33,7 +33,7 @@ class Snapdeal(Page):
                             for i in CommonFunctions.open_in_new_tab(element):
                                 if Snapdeal.product_page.stars.wait_element():
                                     one['stars'] = Snapdeal.product_page.stars.get_attribute('ratings')
-                        else:
+                        if not one.get('stars'):
                             one['stars'] = ''
                     else:
                         text = element.get_attribute('textContent')
