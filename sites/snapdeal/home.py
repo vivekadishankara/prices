@@ -19,7 +19,7 @@ class Snapdeal(Page):
     def search_results(cls, item):
         CommonFunctions.search(cls, item)
         results = []
-        for result in cls.results_page.results:
+        for result in cls.results_page.results():
             one = {}
             result.find_element().location_once_scrolled_into_view
             for key in ['text', 'price', 'stars', 'reviews_num', 'link']:
@@ -27,13 +27,14 @@ class Snapdeal(Page):
                     element = result.get_sub_element(key)
                     if key == 'link':
                         one[key] = element.get_attribute('href')
+                    elif key == 'image':
+                        one[key] = element.get_attribute('src')
                     elif key == 'stars':
-                        if element.wait_element(2):
-                            element = result.get_sub_element('link')
-                            for i in CommonFunctions.open_in_new_tab(element):
-                                if Snapdeal.product_page.stars.wait_element():
-                                    one['stars'] = Snapdeal.product_page.stars.get_attribute('ratings')
-                        else:
+                        element = result.get_sub_element('link')
+                        for i in CommonFunctions.open_in_new_tab(element):
+                            if Snapdeal.product_page.stars.wait_element():
+                                one['stars'] = Snapdeal.product_page.stars.get_attribute('ratings')
+                        if not one.get('stars'):
                             one['stars'] = ''
                     else:
                         text = element.get_attribute('textContent')
