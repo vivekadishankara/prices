@@ -19,7 +19,7 @@ class Snapdeal(Page):
     def search_results(cls, item):
         CommonFunctions.search(cls, item)
         results = []
-        for result in cls.results_page.results(5):
+        for result in cls.results_page.results():
             one = {}
             result.find_element().location_once_scrolled_into_view
             for key in ['text', 'price', 'stars', 'reviews_num', 'link']:

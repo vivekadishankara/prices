@@ -9,9 +9,7 @@ from sites.snapdeal.home import Snapdeal
 @pytest.fixture(scope='class')
 def price_fixture():
     driver.start_driver()
-
     yield
-
     driver.quit()
 
 
@@ -29,9 +27,9 @@ class TestPrice(object):
     @pytest.mark.usefixtures('price_fixture')
     def test_search_basic(self):
         item = 'Redmi 5'
-        Snapdeal.navigate()
-        results = Snapdeal.search_results(item)
-        len_results = len(Snapdeal.results_page.results)
+        Amazon.navigate()
+        results = Amazon.search_results(item)
+        len_results = len(Amazon.results_page.results)
         assert len(results) == len_results
         for result in results:
             for sub in PriceConstants.PRODUCT_ATTRIBUTES:
