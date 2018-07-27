@@ -5,7 +5,7 @@ from framework.base_element import Elements
 class Results:
     results = Elements("//*[contains(@data-tkid,'SEARCH')]")
     results.set_sub_elements(
-        text="//a[2]",
+        name="//a[2]",
         image="//a//img",
         price="//a[3]/div/div",
         stars="//span[contains(@id, 'productRating')]/div",  #example: '4.2 *'

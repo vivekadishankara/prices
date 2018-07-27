@@ -1,12 +1,10 @@
 from selenium.webdriver.common.by import By
 from framework.base_element import Element
-from framework.page import Page
-from shops.flipkart.results import Results
-from commons.functions import CommonFunctions
-from selenium.common.exceptions import NoSuchElementException
+from framework.shop import Shop
+from sites.flipkart.results import Results
 
 
-class Flipkart(Page):
+class Flipkart(Shop):
     url = 'https://www.flipkart.com'
     search_box = Element(By.NAME, 'q')
     search_button = Element(By.XPATH, "//*[@type='submit']")
@@ -20,35 +18,32 @@ class Flipkart(Page):
         cls.close_notification()
 
     @classmethod
-    def search_results(cls, item):
-        CommonFunctions.search(cls, item)
-        results = []
-        for result in cls.results_page.results:
-            one = {}
-            result.find_element().location_once_scrolled_into_view
-            for key in ['text', 'price', 'stars', 'reviews_num', 'link']:
-                try:
-                    element = result.get_sub_element(key)
-                    if key == 'link':
-                        one[key] = cls.url+element.get_attribute('href')
-                    else:
-                        text = element.get_attribute('textContent')
-                        if key  == 'price':
-                            one[key] = int(text[1:].replace(',', ''))
-                        elif key == 'reviews_num':
-                            one[key] = int(text[1:-1].replace(',', ''))
-                        elif key == 'stars':
-                            one[key] = float(text.split()[0])
-                        else:
-                            one[key] = text
-                except NoSuchElementException:
-                    one[key] = ''
-            results.append(one)
-        return results
-
-    @classmethod
     def close_notification(cls):
         try:
             cls.close_login_notification.click()
         except:
             pass
+
+    @classmethod
+    def get_result_stars(cls, element):
+        stars_text = super(Flipkart, cls).get_result_stars(element)
+        if stars_text:
+            return float(stars_text.split()[0])
+        else:
+            return stars_text
+
+    @classmethod
+    def get_result_price(cls, element):
+        price_text = super(Flipkart, cls).get_result_price(element)
+        if price_text:
+            return int(price_text[1:])
+        else:
+            return price_text
+
+    @classmethod
+    def get_result_reviews_num(cls, element):
+        num_text = super(Flipkart, cls).get_result_reviews_num(element)
+        if num_text:
+            return int(num_text[1:-1])
+        else:
+            return num_text
