@@ -3,7 +3,6 @@ from framework.base_element import Element
 from framework.shop import Shop
 from sites.snapdeal.results import Results
 from sites.snapdeal.product import Product
-from commons.functions import CommonFunctions
 
 
 class Snapdeal(Shop):

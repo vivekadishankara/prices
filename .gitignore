@@ -102,3 +102,14 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+#pycharm files
+.idea/
+
+#results
+result*
+reports/
+
+
+new*py
+code_review
