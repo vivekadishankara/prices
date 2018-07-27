@@ -4,7 +4,6 @@ from lib.page import Page
 from sites.snapdeal.results import Results
 from sites.snapdeal.product import Product
 from commons.functions import CommonFunctions
-from selenium.common.exceptions import NoSuchElementException
 
 
 class Snapdeal(Page):
@@ -19,7 +18,7 @@ class Snapdeal(Page):
     def search_results(cls, item):
         CommonFunctions.search(cls, item)
         results = []
-        for result in cls.results_page.results(20):
+        for result in cls.results_page.results():
             info = cls.get_result(result)
             results.append(info)
         return results

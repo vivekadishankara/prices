@@ -13,7 +13,7 @@ def price_fixture():
     driver.quit()
 
 
-class TestPrice(object):
+class TestCode(object):
     def test_pylint_review(self):
         lint_stdout, lint_stderr = lint.py_run('..', return_std=True)
         for line in lint_stdout:
@@ -24,7 +24,9 @@ class TestPrice(object):
         assert score > 5.0
         print(line)
 
-    @pytest.mark.usefixtures('price_fixture')
+
+@pytest.mark.usefixtures('price_fixture')
+class TestPrice(object):
     def test_search_basic(self):
         item = 'Redmi 5'
         Amazon.navigate()
