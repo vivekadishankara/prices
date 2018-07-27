@@ -15,16 +15,6 @@ class Snapdeal(Shop):
     product_page = Product()
 
     @classmethod
-    def search_results(cls, item):
-        cls.search(item)
-        results = []
-        cls.results_page.results.set_timeout(2)
-        for result in cls.results_page.results():
-            info = cls.get_result_info(result)
-            results.append(info)
-        return results
-
-    @classmethod
     def get_result_stars(cls, element):
         stars_path = cls.results_page.results.sub_elements.get('stars')
         link_path = cls.results_page.results.sub_elements.get('link')
