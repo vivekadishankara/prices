@@ -5,7 +5,7 @@ webpage
 """
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import WebDriverException, TimeoutException
 from selenium.webdriver.common.by import By
 from configuration import TIMEOUT
 from lib.driver import driver
@@ -16,6 +16,9 @@ class Element(object):
         self.by = by
         self.locator = locator
         self.timeout = timeout
+
+    def set_timeout(self, t):
+        self.timeout = t
 
     def set_sub_elements(self, **kwargs):
         """
@@ -55,8 +58,11 @@ class Element(object):
         A webdriver element of the current element using the self.by and self.locator variables
         :return: Webdriver element
         """
-        element = driver.find_element(self.by, self.locator)
-        return element
+        try:
+            element = driver.find_element(self.by, self.locator)
+            return element
+        except Exception as e:
+            return e
 
     def find_elements(self):
         """
@@ -64,10 +70,17 @@ class Element(object):
         self.locator variables
         :return: list of Webdriver elements
         """
-        elements = driver.find_elements(self.by, self.locator)
-        return elements
+        try:
+            elements = driver.find_elements(self.by, self.locator)
+            return elements
+        except Exception as e:
+            return e
 
-    def wait_element(self, timeout=None):
+    @staticmethod
+    def is_element(element):
+        return not issubclass(element.__class__, WebDriverException)
+
+    def wait_element(self, timeout=None, ret=False):
         """
         Waits for the element to be visible on page for timeout seconds.
         In case timeout is None, it waits for self.timeout amount of time
@@ -77,12 +90,17 @@ class Element(object):
         if not timeout:
             timeout = self.timeout
         try:
-            WebDriverWait(driver.get_driver(), timeout).until(EC.visibility_of_element_located((self.by, self.locator)))
-        except TimeoutException:
+            element = WebDriverWait(driver.get_driver(), timeout).until(EC.visibility_of_element_located(
+                (self.by, self.locator)))
+        except TimeoutException as e:
+            if ret:
+                return e
             return False
+        if ret:
+            return element
         return True
 
-    def wait_elements(self, timeout=None):
+    def wait_elements(self, timeout=None, ret=False):
         """
         Waits for the all the element corresponding to the object to be visible on page
         for timeout seconds.
@@ -93,13 +111,17 @@ class Element(object):
         if not timeout:
             timeout = self.timeout
         try:
-            WebDriverWait(driver.get_driver(), timeout).until(EC.visibility_of_all_elements_located((
+            element = WebDriverWait(driver.get_driver(), timeout).until(EC.visibility_of_all_elements_located((
                 self.by, self.locator)))
-        except TimeoutException:
+        except TimeoutException as e:
+            if ret:
+                return e
             return False
+        if ret:
+            return element
         return True
 
-    def wait_for_click(self, timeout=None):
+    def wait_for_click(self, timeout=None, ret=False):
         """
         Waits for the element to be clickable for timeout seconds.
         In case timeout is None, it waits for self.timeout amount of time
@@ -109,9 +131,14 @@ class Element(object):
         if not timeout:
             timeout = self.timeout
         try:
-            WebDriverWait(driver.get_driver(), timeout).until(EC.element_to_be_clickable((self.by, self.locator)))
-        except TimeoutException:
+            element = WebDriverWait(driver.get_driver(), timeout).until(EC.element_to_be_clickable(
+                (self.by, self.locator)))
+        except TimeoutException as e:
+            if ret:
+                return e
             return False
+        if ret:
+            return element
         return True
 
     def send_keys(self, keys):
@@ -120,8 +147,9 @@ class Element(object):
         :param keys: keys to be passed
         :return: None
         """
-        element = self.find_element()
-        element.send_keys(keys)
+        element = self.wait_element(ret=True)
+        if self.is_element(element):
+            element.send_keys(keys)
 
     def set_text(self, text):
         """
@@ -129,9 +157,10 @@ class Element(object):
         :param text: text ot be written
         :return: None
         """
-        element = self.find_element()
-        element.clear()
-        element.send_keys(text)
+        element = self.wait_element(ret=True)
+        if self.is_element(element):
+            element.clear()
+            element.send_keys(text)
 
     def get_attribute(self, attribute):
         """
@@ -140,32 +169,31 @@ class Element(object):
         :param attribute: attribute required
         :return: value (str) or True or False if value not present
         """
-        element = self.find_element()
-        attr_value = element.get_attribute(attribute)
-        if not attr_value in ('true', 'false'):
-            return attr_value
-        elif attr_value == 'true':
-            return True
-        else:
-            return False
+        element = self.wait_element(ret=True)
+        if self.is_element(element):
+            attr_value = element.get_attribute(attribute)
+            if not attr_value in ('true', 'false'):
+                return attr_value
+            elif attr_value == 'true':
+                return True
+            elif attr_value == 'false':
+                return False
 
     def get_text(self):
         """
         Waits for the elemetn to be visible and gets the text in the current element
         :return: text (str)
         """
-        self.wait_element()
-        element = self.find_element()
-        return element.text
+        return self.get_attribute('textContent')
 
     def click(self):
         """
         Waits for the element to become clickable and clicks on it
         :return: None
         """
-        self.wait_for_click()
-        element = self.find_element()
-        element.click()
+        element = self.wait_for_click(ret=True)
+        if self.is_element(element):
+            element.click()
 
     def __repr__(self):
         string = super(Element, self).__repr__().split()
