@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
-from lib.base_element import Element
-from lib.page import Page
-from sites.amazon.results import Results
+from framework.base_element import Element
+from framework.page import Page
+from shops.amazon.results import Results
 from commons.functions import CommonFunctions
 from selenium.common.exceptions import NoSuchElementException
 

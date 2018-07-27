@@ -1,12 +1,12 @@
 from selenium.webdriver.common.by import By
-from lib.base_element import Element
-from lib.page import Page
+from framework.base_element import Element
+from framework.shop import Shop
 from sites.snapdeal.results import Results
 from sites.snapdeal.product import Product
 from commons.functions import CommonFunctions
 
 
-class Snapdeal(Page):
+class Snapdeal(Shop):
     url = 'https://www.snapdeal.com/'
     search_box = Element(By.ID, "inputValEnter")
     search_button = Element(By.XPATH, "//*[contains(@class, 'searchformButton')]")
@@ -16,36 +16,39 @@ class Snapdeal(Page):
 
     @classmethod
     def search_results(cls, item):
-        CommonFunctions.search(cls, item)
+        cls.search(item)
         results = []
+        cls.results_page.results.set_timeout(2)
         for result in cls.results_page.results():
-            info = cls.get_result(result)
+            info = cls.get_result_info(result)
             results.append(info)
         return results
 
-    @staticmethod
-    def get_result(result):
-        info = {}
-        result.find_element().location_once_scrolled_into_view
-        for key in result.sub_elements.keys():
-            element = result.get_sub_element(key)
-            if key == 'link':
-                info[key] = element.get_attribute('href')
-            elif key == 'image':
-                info[key] = element.get_attribute('src')
-            elif key == 'stars':
-                element = result.get_sub_element('link')
-                for i in CommonFunctions.open_in_new_tab(element):
-                    info['stars'] = Snapdeal.product_page.stars.get_attribute('ratings')
-            else:
-                text = element.get_text()
-                if text:
-                    if key == 'price':
-                        info[key] = int(text.split()[1].replace(',', ''))
-                    elif key == 'reviews_num':
-                        info[key] = int(text[1:-1].replace(',', ''))
-                    else:
-                        info[key] = text
-            if not info.get(key):
-                info[key] = ''
-        return info
+    @classmethod
+    def get_result_stars(cls, element):
+        stars_path = cls.results_page.results.sub_elements.get('stars')
+        link_path = cls.results_page.results.sub_elements.get('link')
+        link_loc = element.locator.split(stars_path)[0] + link_path
+        element_link = Element(By.XPATH, link_loc)
+        for i in cls.open_in_new_tab(element_link):
+            stars_text = Snapdeal.product_page.stars.get_attribute('ratings')
+        if stars_text:
+            return float(stars_text)
+        else:
+            return ''
+
+    @classmethod
+    def get_result_price(cls, element):
+        price_text = super(Snapdeal, cls).get_result_price(element)
+        if price_text:
+            return price_text.split()[1]
+        else:
+            return price_text
+
+    @classmethod
+    def get_result_reviews_num(cls, element):
+        num_text = super(Snapdeal, cls).get_result_reviews_num(element)
+        if num_text:
+            return int(num_text[1:-1])
+        else:
+            return num_text

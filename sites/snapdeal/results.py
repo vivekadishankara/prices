@@ -1,11 +1,11 @@
 from selenium.webdriver.common.by import By
-from lib.base_element import Elements
+from framework.base_element import Elements
 
 
 class Results:
     results = Elements("//*[contains(@class, 'product-tuple-listing')]")
     results.set_sub_elements(
-        text="//*[contains(@class,'product-title')]",
+        name="//*[contains(@class,'product-title')]",
         image="//img[contains(@class,'product-image')]",
         price="//span[contains(@class,'product-price')]",
         stars="//*[@class='rating-stars ']",

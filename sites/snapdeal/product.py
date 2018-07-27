@@ -1,4 +1,4 @@
-from lib.base_element import Element
+from framework.base_element import Element
 from selenium.webdriver.common.by import By
 
 

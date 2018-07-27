@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from lib.base_element import Element
+from framework.base_element import Element
 
 
 class Results:

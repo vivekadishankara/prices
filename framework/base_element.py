@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException, TimeoutException
 from selenium.webdriver.common.by import By
 from configuration import TIMEOUT
-from lib.driver import driver
+from framework.driver import driver
 
 
 class Element(object):
@@ -218,7 +218,7 @@ class Elements(Element):
 
     def __getitem__(self, item):
         locator_item = '(' + self.locator + ')[' + str(item) + ']'
-        element = Element(self.by, locator_item)
+        element = Element(self.by, locator_item, self.timeout)
         try:
             if self.sub_elements is not None:
                 element.set_sub_elements(**self.sub_elements)

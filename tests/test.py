@@ -1,6 +1,6 @@
 import pytest
 from pylint import epylint as lint
-from lib.driver import driver
+from framework.driver import driver
 from commons.constants import PriceConstants
 from sites.amazon.home import Amazon
 from sites.snapdeal.home import Snapdeal

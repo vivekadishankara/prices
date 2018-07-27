@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
-from lib.base_element import Element
-from lib.page import Page
-from sites.google.results import Results
+from framework.base_element import Element
+from framework.page import Page
+from shops.google.results import Results
 
 
 class Google(Page):
