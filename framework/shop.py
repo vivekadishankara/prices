@@ -93,3 +93,12 @@ class Shop(Page):
             if not info.get(key):
                 info[key] = ''
         return info
+
+    @classmethod
+    def search_results(cls, item):
+        cls.search(item)
+        results = []
+        for result in cls.results_page.results():
+            info = cls.get_result_info(result)
+            results.append(info)
+        return results
