@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from framework.base_element import Element
 from framework.shop import Shop
-from sites.amazon.results import Results
+from sites.shops.amazon.results import Results
 
 
 class Amazon(Shop):

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from framework.base_element import Element
 from framework.shop import Shop
-from sites.shops.flipkart import Results
+from sites.shops.flipkart.results import Results
 
 
 class Flipkart(Shop):

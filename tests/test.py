@@ -1,8 +1,7 @@
 import pytest
 from pylint import epylint as lint
 from framework.driver import driver
-from sites.amazon.home import Amazon
-from sites.snapdeal.home import Snapdeal
+from sites.shops.amazon.home import Amazon
 
 
 @pytest.fixture(scope='class')
