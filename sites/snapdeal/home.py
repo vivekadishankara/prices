@@ -19,36 +19,34 @@ class Snapdeal(Page):
     def search_results(cls, item):
         CommonFunctions.search(cls, item)
         results = []
-        for result in cls.results_page.results():
-            one = {}
-            result.find_element().location_once_scrolled_into_view
-            for key in ['text', 'price', 'stars', 'reviews_num', 'link']:
-                try:
-                    element = result.get_sub_element(key)
-                    if key == 'link':
-                        one[key] = element.get_attribute('href')
-                    elif key == 'image':
-                        one[key] = element.get_attribute('src')
-                    elif key == 'stars':
-                        element = result.get_sub_element('link')
-                        for i in CommonFunctions.open_in_new_tab(element):
-                            if Snapdeal.product_page.stars.wait_element():
-                                one['stars'] = Snapdeal.product_page.stars.get_attribute('ratings')
-                        if not one.get('stars'):
-                            one['stars'] = ''
-                    else:
-                        text = element.get_attribute('textContent')
-                        if key == 'price':
-                            one[key] = int(text.split()[1].replace(',', ''))
-                        elif key == 'reviews_num':
-                            one[key] = int(text[1:-1].replace(',', ''))
-                        else:
-                            one[key] = text
-                except NoSuchElementException:
-                    if not one.get(key):
-                        one[key] = ''
-                    if key == 'link':
-                        one['stars'] = ''
-            results.append(one)
+        for result in cls.results_page.results(20):
+            info = cls.get_result(result)
+            results.append(info)
         return results
 
+    @staticmethod
+    def get_result(result):
+        info = {}
+        result.find_element().location_once_scrolled_into_view
+        for key in result.sub_elements.keys():
+            element = result.get_sub_element(key)
+            if key == 'link':
+                info[key] = element.get_attribute('href')
+            elif key == 'image':
+                info[key] = element.get_attribute('src')
+            elif key == 'stars':
+                element = result.get_sub_element('link')
+                for i in CommonFunctions.open_in_new_tab(element):
+                    info['stars'] = Snapdeal.product_page.stars.get_attribute('ratings')
+            else:
+                text = element.get_text()
+                if text:
+                    if key == 'price':
+                        info[key] = int(text.split()[1].replace(',', ''))
+                    elif key == 'reviews_num':
+                        info[key] = int(text[1:-1].replace(',', ''))
+                    else:
+                        info[key] = text
+            if not info.get(key):
+                info[key] = ''
+        return info
