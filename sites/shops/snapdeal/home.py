@@ -31,13 +31,11 @@ class Snapdeal(Shop):
         price_text = super(Snapdeal, cls).get_result_price(element)
         if price_text:
             return price_text.split()[1]
-        else:
-            return price_text
+        return price_text
 
     @classmethod
     def get_result_reviews_num(cls, element):
         num_text = super(Snapdeal, cls).get_result_reviews_num(element)
         if num_text:
             return int(num_text[1:-1])
-        else:
-            return num_text
+        return num_text

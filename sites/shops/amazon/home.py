@@ -16,21 +16,18 @@ class Amazon(Shop):
         stars_text = super(Amazon, cls).get_result_stars(element)
         if stars_text:
             return float(stars_text[0])
-        else:
-            return stars_text
+        return stars_text
 
     @classmethod
     def get_result_price(cls, element):
         price_text = super(Amazon, cls).get_result_price(element)
         if price_text:
             return int(price_text)
-        else:
-            return price_text
+        return price_text
 
     @classmethod
     def get_result_reviews_num(cls, element):
         num_text = super(Amazon, cls).get_result_reviews_num(element)
         if num_text:
             return int(num_text)
-        else:
-            return num_text
+        return num_text

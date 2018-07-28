@@ -1,5 +1,5 @@
-from framework.base_element import Element
 from selenium.webdriver.common.by import By
+from framework.base_element import Element
 
 
 class Product(object):

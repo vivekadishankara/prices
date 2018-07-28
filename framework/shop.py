@@ -36,8 +36,7 @@ class Shop(Page):
         stars_text = element.get_text()
         if stars_text:
             return stars_text
-        else:
-            return ''
+        return ''
 
     @staticmethod
     def get_result_price(element):
@@ -49,8 +48,7 @@ class Shop(Page):
         price_text = element.get_text()
         if price_text:
             return price_text.replace(',', '')
-        else:
-            return ''
+        return ''
 
     @staticmethod
     def get_result_reviews_num(element):
@@ -62,8 +60,7 @@ class Shop(Page):
         num_text = element.get_text()
         if num_text:
             return num_text.replace(',', '')
-        else:
-            return ''
+        return ''
 
     @staticmethod
     def get_result_name(element):
@@ -75,8 +72,7 @@ class Shop(Page):
         name_text = element.get_text()
         if name_text:
             return name_text
-        else:
-            return ''
+        return ''
 
     @classmethod
     def get_result_info(cls, result):

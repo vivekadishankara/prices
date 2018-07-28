@@ -21,7 +21,7 @@ class Flipkart(Shop):
     def close_notification(cls):
         try:
             cls.close_login_notification.click()
-        except:
+        except Exception:
             pass
 
     @classmethod
@@ -29,21 +29,18 @@ class Flipkart(Shop):
         stars_text = super(Flipkart, cls).get_result_stars(element)
         if stars_text:
             return float(stars_text.split()[0])
-        else:
-            return stars_text
+        return stars_text
 
     @classmethod
     def get_result_price(cls, element):
         price_text = super(Flipkart, cls).get_result_price(element)
         if price_text:
             return int(price_text[1:])
-        else:
-            return price_text
+        return price_text
 
     @classmethod
     def get_result_reviews_num(cls, element):
         num_text = super(Flipkart, cls).get_result_reviews_num(element)
         if num_text:
             return int(num_text[1:-1])
-        else:
-            return num_text
+        return num_text
