@@ -1,9 +1,7 @@
 import pytest
 from pylint import epylint as lint
-from lib.driver import driver
-from commons.constants import PriceConstants
-from sites.amazon.home import Amazon
-from sites.snapdeal.home import Snapdeal
+from framework.driver import driver
+from sites.shops.amazon.home import Amazon
 
 
 @pytest.fixture(scope='class')
@@ -13,7 +11,7 @@ def price_fixture():
     driver.quit()
 
 
-class TestPrice(object):
+class TestCode(object):
     def test_pylint_review(self):
         lint_stdout, lint_stderr = lint.py_run('..', return_std=True)
         for line in lint_stdout:
@@ -24,13 +22,16 @@ class TestPrice(object):
         assert score > 5.0
         print(line)
 
-    @pytest.mark.usefixtures('price_fixture')
+
+@pytest.mark.usefixtures('price_fixture')
+class TestPrice(object):
     def test_search_basic(self):
         item = 'Redmi 5'
-        Amazon.navigate()
-        results = Amazon.search_results(item)
-        len_results = len(Amazon.results_page.results)
+        shop = Amazon
+        shop.navigate()
+        results = shop.search_results(item)
+        len_results = len(shop.results_page.results)
         assert len(results) == len_results
         for result in results:
-            for sub in PriceConstants.PRODUCT_ATTRIBUTES:
+            for sub in shop.results_page.results.sub_elements.keys():
                 assert result.get(sub) is not None

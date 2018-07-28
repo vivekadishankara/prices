@@ -11,7 +11,8 @@ class Driver(object):
     """
     This class wraps the Selenium Webdriver and defines the driver specific methods
     """
-    def start_driver(self, browser=config.BROWSER, path_to_executable=config.PATH, headless=config.HEADLESS):
+    def start_driver(self, browser=config.BROWSER, path_to_executable=config.PATH, headless=config.HEADLESS,
+                     pageLoadStrategy=config.PAGE_LOAD_STRATEGY):
         """
         Initializes the Driver object
         :param browser: 'Firefox' or 'Chrome'
@@ -21,6 +22,7 @@ class Driver(object):
         self.path = path_to_executable
         if browser.lower() == 'firefox':
             self.capabilities = webdriver.DesiredCapabilities.FIREFOX
+            self.capabilities["pageLoadStrategy"] = pageLoadStrategy
             self.profile = webdriver.FirefoxProfile()
             self.profile.set_preference("browser.tabs.remote.autostart", False)
             self.profile.set_preference("browser.tabs.remote.autostart.1", False)
