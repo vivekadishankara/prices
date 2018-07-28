@@ -1,29 +1,16 @@
 """
-This module defines the Page class which is to be inherited by the home pages of all sites
+This module defines the classes required to map the sites and their common features
 """
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from framework.base_element import Element
+from framework.base_element import Element, Elements
 from framework.driver import driver
 
 
-class Page(object):
+class PrePage(object):
     """
-    Page class for the Page object model.
-    All other related pages for the sites inherit from object
+    This class defines locator methods that return instances of Element and Element class
     """
-    url = None
-    search_box = None
-    search_button = None
-
-    @classmethod
-    def navigate(cls):
-        """
-        navigates to the site url
-        :return: None
-        """
-        driver.get(cls.url)
-
     @staticmethod
     def text_element(text):
         """
@@ -43,6 +30,34 @@ class Page(object):
         """
         element = Element(By.XPATH, "//*[contains(text(), '" + text + "')]")
         return element
+
+
+class Results(PrePage):
+    """
+    This class maps the result page that appears after carrying out a search on a page
+    """
+    results = Elements('')
+    next_page_link = Element('', '')
+
+
+class Page(PrePage):
+    """
+    Page class for the Page object model.
+    All home pages inherit from this class
+    """
+    url = ''
+    search_box = Element('', '')
+    search_button = Element('', '')
+
+    results_page = Results()
+
+    @classmethod
+    def navigate(cls):
+        """
+        navigates to the site url
+        :return: None
+        """
+        driver.get(cls.url)
 
     @classmethod
     def search(cls, term):
