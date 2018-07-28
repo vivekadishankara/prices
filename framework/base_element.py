@@ -279,6 +279,7 @@ class Elements(Element):
             if self[self.i].wait_element():
                 yield self[self.i]
             else:
+                self.i -= 1 # making up for lost element
                 return None
 
     def __call__(self, num=None):

@@ -122,6 +122,10 @@ class Shop(Page):
                 if len(results_info) >= num:
                     cls.results_page.results.set_i()
                     return results_info
-            cls.results_page.results.set_i()
-            if not cls.results_page.next_page_link.click():
-                break
+            if cls.results_page.next_page_link.locator:
+                cls.results_page.results.set_i()
+                if not cls.results_page.next_page_link.click():
+                    break
+            elif cls.results_page.see_more_link.locator:
+                if not cls.results_page.see_more_link.click():
+                    break

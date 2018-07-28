@@ -38,6 +38,7 @@ class Results(PrePage):
     """
     results = Elements('')
     next_page_link = Element('', '')
+    see_more_link = Element('', '')
 
 
 class Page(PrePage):
