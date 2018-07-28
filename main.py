@@ -1,7 +1,7 @@
-from sites.amazon.home import Amazon
-from sites.flipkart.home import Flipkart
-from sites.snapdeal.home import Snapdeal
-from lib.driver import driver
+from sites.shops.amazon.home import Amazon
+from sites.shops.snapdeal.home import Snapdeal
+from sites.shops.flipkart.home import Flipkart
+from framework.driver import driver
 
 
 driver.start_driver()
