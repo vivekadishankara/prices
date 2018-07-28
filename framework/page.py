@@ -12,33 +12,62 @@ class PrePage(object):
     This class defines locator methods that return instances of Element and Element class
     """
     @staticmethod
-    def text_element(text):
+    def element_by_xpath(locator, multi=False):
+        if multi:
+            return Elements(By.XPATH, locator)
+        else:
+            return Element(By.XPATH, locator)
+
+    @staticmethod
+    def element_by_name(locator):
+        return Element(By.NAME, locator)
+
+    @staticmethod
+    def element_by_id(locator):
+        return Element(By.ID, locator)
+
+    @staticmethod
+    def element_by_class(locator):
+        return Element(By.CLASS_NAME, locator)
+
+    @classmethod
+    def text_element(cls, text, multi=False):
         """
         Gets an element characterized by the given text
         :param text: required text
         :return: Element object
         """
-        element = Element(By.XPATH, "//*[text()='" + text + "']")
-        return element
+        locator = "//*[text()='" + text + "']"
+        return cls.element_by_xpath(locator, multi)
 
-    @staticmethod
-    def text_partial(text):
+    @classmethod
+    def text_partial(cls, text, multi=False):
         """
         Gets the element which contains the given text along with other possible text
         :param text: required text
         :return: Element object
         """
-        element = Element(By.XPATH, "//*[contains(text(), '" + text + "')]")
-        return element
+        locator = "//*[contains(text(), '" + text + "')]"
+        return cls.element_by_xpath(locator, multi)
+
+    @classmethod
+    def element_by_attr(cls, attr, val, multi=False):
+        locator = "//*[@" + attr + "='" + val + "']"
+        return cls.element_by_xpath(locator, multi)
+
+    @classmethod
+    def element_by_attr_partial(cls, attr, val, multi=False):
+        locator = "//*[contains(@" + attr + ",'" + val + "')]"
+        return cls.element_by_xpath(locator, multi)
 
 
 class Results(PrePage):
     """
     This class maps the result page that appears after carrying out a search on a page
     """
-    results = Elements('')
-    next_page_link = Element('', '')
-    see_more_link = Element('', '')
+    results = PrePage.element_by_xpath('', True)
+    next_page_link = PrePage.element_by_xpath('')
+    see_more_link = PrePage.element_by_xpath('')
 
 
 class Page(PrePage):
@@ -47,8 +76,8 @@ class Page(PrePage):
     All home pages inherit from this class
     """
     url = ''
-    search_box = Element('', '')
-    search_button = Element('', '')
+    search_box = PrePage.element_by_xpath('')
+    search_button = PrePage.element_by_xpath('')
 
     results_page = Results()
 

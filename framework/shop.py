@@ -2,8 +2,7 @@
 This module defines the empty classes required to map the shop, its home page, search results page
 All shops need to inherit and make use of these classes
 """
-from framework.page import Results, Page
-from framework.base_element import Element, Elements
+from framework.page import PrePage, Results, Page
 
 
 class ShopResults(Results):
@@ -12,7 +11,7 @@ class ShopResults(Results):
     For the results Elements instance, sub elements need to be set and
     corresponding get_result_key function needs to be defined
     """
-    results = Elements('')
+    results = Results.element_by_xpath('', True)
     results.set_sub_elements(
         name="",
         image="",
@@ -89,11 +88,15 @@ class ShopResults(Results):
         return ''
 
 
+class Product(PrePage):
+    pass
+
 class Shop(Page):
     """
     Home pages of all shops inherit from this class
     """
     results_page = ShopResults()
+    product_page = Product()
 
     @classmethod
     def get_result_info(cls, result):

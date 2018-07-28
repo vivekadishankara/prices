@@ -1,10 +1,8 @@
-from selenium.webdriver.common.by import By
-from framework.base_element import Element, Elements
 from framework.shop import ShopResults, Shop
 
 
 class AmazonResults(ShopResults):
-    results = Elements("//div[@class='s-item-container']")
+    results = ShopResults.element_by_xpath("//div[@class='s-item-container']", True)
     results.set_sub_elements(
         name="//h2",
         image="//*[@class='s-access-image cfMarker']",
@@ -13,7 +11,7 @@ class AmazonResults(ShopResults):
         reviews_num="//*[contains(@class,'a-icon-star')]/following::a",
         link="//*[contains(@class,'s-access-detail-page')]"
     )
-    next_page_link = Element(By.ID, "pagnNextString")
+    next_page_link = ShopResults.element_by_id('pagnNextString')
 
     @classmethod
     def get_result_stars(cls, element):
@@ -39,7 +37,7 @@ class AmazonResults(ShopResults):
 
 class Amazon(Shop):
     url = 'http://www.amazon.in'
-    search_box = Element(By.ID, "twotabsearchtextbox")
-    search_button = Element(By.XPATH, "//*[@value='Go']")
+    search_box = Shop.element_by_id('twotabsearchtextbox')
+    search_button = Shop.element_by_attr('value', 'Go')
 
     results_page = AmazonResults()

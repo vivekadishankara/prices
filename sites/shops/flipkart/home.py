@@ -1,10 +1,8 @@
-from selenium.webdriver.common.by import By
-from framework.base_element import Element, Elements
 from framework.shop import ShopResults, Shop
 
 
 class FlipkartResults(ShopResults):
-    results = Elements("//*[contains(@data-tkid,'SEARCH')]")
+    results = ShopResults.element_by_attr_partial('data-tkid', 'SEARCH', True)
     results.set_sub_elements(
         name="//a[2]",
         image="//a//img",
@@ -13,7 +11,7 @@ class FlipkartResults(ShopResults):
         reviews_num="//div[2]/span[2]",    #example: (3,19,899)
         link="//a[2]"
     )
-    next_page_link = Element(By.XPATH, "//*[text()='Next']")
+    next_page_link = ShopResults.text_element('Next')
 
     @classmethod
     def get_result_stars(cls, element):
@@ -39,9 +37,9 @@ class FlipkartResults(ShopResults):
 
 class Flipkart(Shop):
     url = 'https://www.flipkart.com'
-    search_box = Element(By.NAME, 'q')
-    search_button = Element(By.XPATH, "//*[@type='submit']")
-    close_login_notification = Element(By.XPATH, "//*[@tabindex]/div/button")
+    search_box = Shop.element_by_name('q')
+    search_button = Shop.element_by_attr('type', 'submit')
+    close_login_notification = Shop.element_by_xpath("//*[@tabindex]/div/button")
 
     results_page = FlipkartResults()
 
