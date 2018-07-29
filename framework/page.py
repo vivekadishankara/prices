@@ -14,7 +14,7 @@ class PrePage(object):
     @staticmethod
     def element_by_xpath(locator, multi=False):
         if multi:
-            return Elements(By.XPATH, locator)
+            return Elements(locator)
         else:
             return Element(By.XPATH, locator)
 
