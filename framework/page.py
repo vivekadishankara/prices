@@ -1,20 +1,85 @@
 """
-This module defines the Page class which is to be inherited by the home pages of all sites
+This module defines the classes required to map the sites and their common features
 """
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from framework.base_element import Element
+from framework.base_element import Element, Elements
 from framework.driver import driver
 
 
-class Page(object):
+class PrePage(object):
+    """
+    This class defines locator methods that return instances of Element and Element class
+    """
+    @staticmethod
+    def element_by_xpath(locator, multi=False):
+        if multi:
+            return Elements(locator)
+        else:
+            return Element(By.XPATH, locator)
+
+    @staticmethod
+    def element_by_name(locator):
+        return Element(By.NAME, locator)
+
+    @staticmethod
+    def element_by_id(locator):
+        return Element(By.ID, locator)
+
+    @staticmethod
+    def element_by_class(locator):
+        return Element(By.CLASS_NAME, locator)
+
+    @classmethod
+    def text_element(cls, text, multi=False):
+        """
+        Gets an element characterized by the given text
+        :param text: required text
+        :return: Element object
+        """
+        locator = "//*[text()='" + text + "']"
+        return cls.element_by_xpath(locator, multi)
+
+    @classmethod
+    def text_partial(cls, text, multi=False):
+        """
+        Gets the element which contains the given text along with other possible text
+        :param text: required text
+        :return: Element object
+        """
+        locator = "//*[contains(text(), '" + text + "')]"
+        return cls.element_by_xpath(locator, multi)
+
+    @classmethod
+    def element_by_attr(cls, attr, val, multi=False):
+        locator = "//*[@" + attr + "='" + val + "']"
+        return cls.element_by_xpath(locator, multi)
+
+    @classmethod
+    def element_by_attr_partial(cls, attr, val, multi=False):
+        locator = "//*[contains(@" + attr + ",'" + val + "')]"
+        return cls.element_by_xpath(locator, multi)
+
+
+class Results(PrePage):
+    """
+    This class maps the result page that appears after carrying out a search on a page
+    """
+    results = PrePage.element_by_xpath('', True)
+    next_page_link = PrePage.element_by_xpath('')
+    see_more_link = PrePage.element_by_xpath('')
+
+
+class Page(PrePage):
     """
     Page class for the Page object model.
-    All other related pages for the sites inherit from object
+    All home pages inherit from this class
     """
-    url = None
-    search_box = None
-    search_button = None
+    url = ''
+    search_box = PrePage.element_by_xpath('')
+    search_button = PrePage.element_by_xpath('')
+
+    results_page = Results()
 
     @classmethod
     def navigate(cls):
@@ -23,26 +88,6 @@ class Page(object):
         :return: None
         """
         driver.get(cls.url)
-
-    @staticmethod
-    def text_element(text):
-        """
-        Gets an element characterized by the given text
-        :param text: required text
-        :return: Element object
-        """
-        element = Element(By.XPATH, "//*[text()='" + text + "']")
-        return element
-
-    @staticmethod
-    def text_partial(text):
-        """
-        Gets the element which contains the given text along with other possible text
-        :param text: required text
-        :return: Element object
-        """
-        element = Element(By.XPATH, "//*[contains(text(), '" + text + "')]")
-        return element
 
     @classmethod
     def search(cls, term):

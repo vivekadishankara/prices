@@ -1,13 +1,26 @@
 """
-This module defines the Shop class which is to be inherited by the home pages of all shops
+This module defines the empty classes required to map the shop, its home page, search results page
+All shops need to inherit and make use of these classes
 """
-from framework.page import Page
+from framework.page import PrePage, Results, Page
 
 
-class Shop(Page):
+class ShopResults(Results):
     """
-    Home pages of all sites inherit from this class
+    This class maps the search results page of the shop.
+    For the results Elements instance, sub elements need to be set and
+    corresponding get_result_key function needs to be defined
     """
+    results = Results.element_by_xpath('', True)
+    results.set_sub_elements(
+        name="",
+        image="",
+        price="",
+        stars="",
+        reviews_num="",
+        link=""
+    )
+
     @staticmethod
     def get_result_link(element):
         """
@@ -74,6 +87,17 @@ class Shop(Page):
             return name_text
         return ''
 
+
+class Product(PrePage):
+    pass
+
+class Shop(Page):
+    """
+    Home pages of all shops inherit from this class
+    """
+    results_page = ShopResults()
+    product_page = Product()
+
     @classmethod
     def get_result_info(cls, result):
         """
@@ -85,16 +109,26 @@ class Shop(Page):
         result.find_element().location_once_scrolled_into_view
         for key in result.sub_elements.keys():
             element = result.get_sub_element(key)
-            info[key] = getattr(cls, 'get_result_' + key)(element)
+            info[key] = getattr(cls.results_page, 'get_result_' + key)(element)
             if not info.get(key):
                 info[key] = ''
         return info
 
     @classmethod
-    def search_results(cls, item):
+    def search_results(cls, item, num=None):
         cls.search(item)
-        results = []
-        for result in cls.results_page.results():
-            info = cls.get_result_info(result)
-            results.append(info)
-        return results
+        results_info = []
+        while True:
+            for result in cls.results_page.results(num):
+                info = cls.get_result_info(result)
+                results_info.append(info)
+                if len(results_info) >= num:
+                    cls.results_page.results.set_i()
+                    return results_info
+            if cls.results_page.next_page_link.locator:
+                cls.results_page.results.set_i()
+                if not cls.results_page.next_page_link.click():
+                    break
+            elif cls.results_page.see_more_link.locator:
+                if not cls.results_page.see_more_link.click():
+                    break

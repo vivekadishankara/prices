@@ -211,11 +211,16 @@ class Element(object):
     def click(self):
         """
         Waits for the element to become clickable and clicks on it
-        :return: None
+        :return: True if successfully clicked and False otherwise
         """
         element = self.wait_for_click(ret=True)
         if self.is_element(element):
-            element.click()
+            try:
+                element.click()
+                return True
+            except Exception:
+                pass
+        return False
 
     def __repr__(self):
         string = super(Element, self).__repr__().split()
@@ -238,6 +243,22 @@ class Elements(Element):
         self.i = 0
         self.num = None
 
+    def set_i(self, i=0):
+        """sets i"""
+        self.i = i
+
+    def get_i(self):
+        """gets i"""
+        return self.i
+
+    def set_num(self, num):
+        """sets num"""
+        self.num = num
+
+    def get_num(self):
+        """gets num"""
+        return self.num
+
     def __getitem__(self, item):
         locator_item = '(' + self.locator + ')[' + str(item) + ']'
         element = Element(self.by, locator_item, self.timeout)
@@ -258,6 +279,7 @@ class Elements(Element):
             if self[self.i].wait_element():
                 yield self[self.i]
             else:
+                self.i -= 1 # making up for lost element
                 return None
 
     def __call__(self, num=None):
