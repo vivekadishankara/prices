@@ -1,6 +1,7 @@
 """
 This module defines the classes required to map the sites and their common features
 """
+from contextlib import contextmanager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from framework.base_element import Element, Elements
@@ -102,6 +103,7 @@ class Page(PrePage):
         cls.search_button.click()
 
     @staticmethod
+    @contextmanager
     def open_in_new_tab(element):
         """
         Open the given link in the element in a new tab and closes the new tab after the actions taken

@@ -19,7 +19,7 @@ class SnapdealResults(ShopResults):
         link_path = cls.results.sub_elements.get('link')
         link_loc = element.locator.split(stars_path)[0] + link_path
         element_link = ShopResults.element_by_xpath(link_loc)
-        for i in Shop.open_in_new_tab(element_link):
+        with Shop.open_in_new_tab(element_link):
             stars_text = Snapdeal.product_page.stars.get_attribute('ratings')
         if stars_text:
             return float(stars_text)

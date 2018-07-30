@@ -3,7 +3,8 @@ This module defines the Driver class which wraps the Selenium Webdriver
 """
 import datetime
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 import configuration as config
 
 
@@ -11,29 +12,43 @@ class Driver(object):
     """
     This class wraps the Selenium Webdriver and defines the driver specific methods
     """
-    def start_driver(self, browser=config.BROWSER, path_to_executable=config.PATH, headless=config.HEADLESS,
+    def __init__(self, browser=config.BROWSER, path_to_executable=config.PATH, headless=config.HEADLESS,
                      pageLoadStrategy=config.PAGE_LOAD_STRATEGY):
+        self.browser = browser
+        self.path = path_to_executable
+        self.headless = headless
+        self.pageLoadStrategy = pageLoadStrategy
+
+    def start_driver(self):
         """
         Initializes the Driver object
         :param browser: 'Firefox' or 'Chrome'
         :param headless: boolean
         """
-        self.headless = headless
-        self.path = path_to_executable
-        if browser.lower() == 'firefox':
+        if self.browser.lower() == 'firefox':
             self.capabilities = webdriver.DesiredCapabilities.FIREFOX
-            self.capabilities["pageLoadStrategy"] = pageLoadStrategy
+            self.capabilities["pageLoadStrategy"] = self.pageLoadStrategy
             self.profile = webdriver.FirefoxProfile()
             self.profile.set_preference("browser.tabs.remote.autostart", False)
             self.profile.set_preference("browser.tabs.remote.autostart.1", False)
             self.profile.set_preference("browser.tabs.remote.autostart.2", False)
             self.profile.set_preference("dom.webnotifications.enabled", False)
-            self.options = Options()
+            self.options = FirefoxOptions()
             if self.headless:
                 self.options.add_argument('--headless')
             self.driver = webdriver.Firefox(executable_path=self.path, capabilities=self.capabilities,
                                             firefox_profile=self.profile, options=self.options)
-            self.maximize_window()
+        if self.browser.lower() == 'chrome': #not tested
+            self.capabilities = webdriver.DesiredCapabilities.CHROME
+            self.capabilities["pageLoadStrategy"] = self.pageLoadStrategy
+            self.options = ChromeOptions()
+            if self.headless:
+                self.options.add_argument('--headless')
+                self.options.add_argument('--disable-gpu')
+            self.driver = webdriver.Chrome(executable_path=self.path, desired_capabilities=self.capabilities,
+                                           chrome_options=self.options)
+
+        self.maximize_window()
 
     def get_driver(self):
         """
@@ -153,6 +168,12 @@ class Driver(object):
         :return: None
         """
         self.driver.close()
+
+    def __enter__(self):
+        self.start_driver()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.quit()
 
 
 driver = Driver()
