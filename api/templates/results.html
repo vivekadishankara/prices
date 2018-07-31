@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Main{% endblock %}
+{% block content %}
+    <h1>Search results for {{ item }}</h1>
+    {% for shop in shops %}
+    <h2>{{ shop }}</h2>
+    <table style="width:80%">
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Prices</th>
+            <th>Stars</th>
+            <th>Reviews</th>
+        </tr>
+        {% for result in results[shop] %}
+        <tr>
+            <td><a href="{{ result.link }}">{{ result.name }}</a></td>
+            <td><img src="{{ result.image }}"></td>
+            <td>{{ result.price }}</td>
+            <td>{{ result.stars }}</td>
+            <td>{{ result.reviews_num }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+{% endblock %}
