@@ -7,7 +7,7 @@ extension-pkg-whitelist=
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=CVS, new.py, new2.py, new3.py, new4.py, results, geckodriver.log, LICENSE, pylintrc, requirements.txt, code_review
+ignore=CVS, new.py, new2.py, new3.py, new4.py, results, results.csv, geckodriver.log, LICENSE, pylintrc, requirements.txt, code_review
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.
@@ -191,7 +191,7 @@ never-returning-functions=sys.exit
 # List of decorators that produce context managers, such as
 # contextlib.contextmanager. Add to this list to register other decorators that
 # produce valid context managers.
-contextmanager-decorators=contextlib.contextmanager
+contextmanager-decorators=contextmanager
 
 # List of members which are set dynamically and missed by pylint inference
 # system, and so shouldn't trigger E1101 when accessed. Python regular
