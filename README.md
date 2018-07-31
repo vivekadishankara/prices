@@ -4,7 +4,7 @@ This repo implements a selenium scrapper to get prices for an item from three ma
 It has primarily three major components:
   - Python Selenium framework which wraps around the Webdriver to give Page classes having element objects. More on this later.
   - Locators for prominent shopping site like Flipkart, Amazon and Snapdeal to navigate these websites and scrap information
-  - A Flask api that uses these features to carry out interactive real-time scraping (on the way)
+  - A Flask api that uses these features to carry out interactive real-time scraping
  
  How to use:
  clone this repo using the command:
