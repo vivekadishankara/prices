@@ -23,11 +23,11 @@ export FLASK_APP=/<path to repo>/prices/api
 flask run
 
 Set the following variables in the configuration file: (note the browser driver needs to be downloaded)
-:param PATH: is the path to the browser driver
-:param BROWSER: browser type, typically firefox or chrome (not tested)
-:param HEADLESS: boolean, whether to carry out the search in an open browser, True if headless
-:param PAGE_LOAD_STRATEGY: 'normal', 'eager' or 'none', 'eager' recommended
-:param TIMEOUT: waiting time for elements on a page
+  - PATH: is the path to the browser driver
+  - BROWSER: browser type, typically firefox or chrome (not tested)
+  - HEADLESS: boolean, whether to carry out the search in an open browser, True if headless
+  - PAGE_LOAD_STRATEGY: 'normal', 'eager' or 'none', 'eager' recommended
+  - TIMEOUT: waiting time for elements on a page
 
 Now open a browser and browse to: 
 localhost:5000/
