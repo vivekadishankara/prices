@@ -16,7 +16,11 @@
         {% for result in results[shop] %}
         <tr>
             <td><a href="{{ result.link }}">{{ result.name }}</a></td>
-            <td><img src="{{ result.image }}"></td>
+            <td>
+                <div class="itemimage" >
+                    <img src="{{ result.image }}">
+                </div>
+            </td>
             <td>{{ result.price }}</td>
             <td>{{ result.stars }}</td>
             <td>{{ result.reviews_num }}</td>
