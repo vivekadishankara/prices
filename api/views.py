@@ -13,9 +13,14 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/results1')
+@app.route('/results1', methods=['POST'])
 def results1():
     item = request.form['q']
+    try:
+        pums = request.form['gums']
+        print(pums)
+    except:
+        pass
     fp = open('results.csv')
     lines = fp.readlines()
     res = []
@@ -32,7 +37,8 @@ def results1():
 @app.route('/results', methods=['POST'])
 def results():
     item = request.form['q']
-    nums = [1, 1, 1]
+    num = int(request.form['nums'])
+    nums = [num, num, num]
     search_results = simple_search(item, SHOPS, nums)
 
     return render_template('results.html', item=item, shops=SHOPS, results=search_results)
