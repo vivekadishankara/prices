@@ -5,3 +5,7 @@ h1 {
 form {
     display:inline;
 }
+
+div.itemimage {
+    width: 200px;
+}

@@ -7,17 +7,11 @@
 </head>
 <body>
     <form role="form" action="{{ url_for('results') }}" method="post" name="search" >
-        <div class="form-row">
-            <div class="col-sm-10">
-                <input type="text" name="q" required autofocus />
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" name="startSearch" class="btn btn-primary">Search</button>
-            </div>
-        </div>
+        <label for="title" class="control-label col-sm-2">Item:</label>
+            <input type="text" name="q" required autofocus />
+        <label for="title" class="control-label col-sm-2">Results:</label>
+            <input type="number" name="nums" min="1" value="1" />
+        <button type="submit" name="startSearch" class="btn btn-primary">Search</button>
     </form>
     <hr>
     {% block content %}{% endblock %}
