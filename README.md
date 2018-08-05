@@ -6,24 +6,27 @@ It has primarily three major components:
   - Locators for prominent shopping site like Flipkart, Amazon and Snapdeal to navigate these websites and scrap information
   - A Flask api that uses these features to carry out interactive real-time scraping
  
-Usage:
+## Requirements:
 clone this repo using the command:
-
+```
 git clone https://github.com/vivekadishankara/prices.git
-
-enter the prices folder and run the command:
-
-pip install -r requirements.txt
+```
+enter the prices folder and install the requirements:
+```
+$ pip install -r requirements.txt
+```
 
 This install all the required libraries. It is recommended that you create a virtual environment before doing this.
 
+## Usage:
 Currently the only functionality is searching for an item on the three websites and presenting the results on a common page.
 setup the api as such:
-export FLASK_APP=/<path to repo>/prices/api
-flask run
-
-Set the following variables in the configuration file: (note the browser driver needs to be downloaded)
-  - PATH: is the path to the browser driver
+```
+$ export FLASK_APP=/<path to repo>/prices/api
+$ flask run
+```
+Set the following variables in the configuration file: 
+  - PATH: is the path to the browser driver (for Firefox, it needs to be downloaded from [here](https://github.com/mozilla/geckodriver/releases))
   - BROWSER: browser type, typically firefox or chrome (not tested)
   - HEADLESS: boolean, whether to carry out the search in an open browser, True if headless
   - PAGE_LOAD_STRATEGY: 'normal', 'eager' or 'none', 'eager' recommended
