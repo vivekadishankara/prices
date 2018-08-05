@@ -13,9 +13,9 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/results1', methods=['POST'])
+@app.route('/results1')
 def results1():
-    item = request.form['q']
+    item = 'Redmi 5'
     try:
         pums = request.form['gums']
         print(pums)
@@ -42,6 +42,3 @@ def results():
     search_results = simple_search(item, SHOPS, nums)
 
     return render_template('results.html', item=item, shops=SHOPS, results=search_results)
-
-if __name__ == '__main__':
-    app.run()
