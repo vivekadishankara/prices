@@ -6,6 +6,11 @@ form {
     display:inline;
 }
 
-div.itemimage {
-    width: 200px;
+img.Flipkartimg {
+    width: 100px;
 }
+
+table, td, th {
+    text-align: center;
+}
+

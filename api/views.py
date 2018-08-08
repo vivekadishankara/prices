@@ -114,7 +114,3 @@ def read_csv():
     for i in range(len(SHOPS)):
         search_results[SHOPS[i]] = res[(i) * 5: (i + 1) * 5]
     return search_results
-
-
-if __name__ == '__main__':
-    app.run()
