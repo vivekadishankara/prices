@@ -1,0 +1,34 @@
+from api import db
+from metashopper.shopper import ITEM_ATTR
+
+
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    itemname = db.Column(db.String(64), index=True, unique=True)
+    results = db.relationship('Result', backref='search_item', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Item {}>'.format(self.itemname)
+
+
+class Result(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    result_id = db.Column(db.Integer, db.ForeignKey('item.id'))
+    shop = db.Column(db.String(64))
+
+    def __repr__(self):
+        return '<Result:\n{}\n{}\n>'.format(self.shop, self.price)
+
+
+for attr in ITEM_ATTR:
+    if attr == 'name':
+        attr_column = db.Column(db.String(64))
+    elif attr in ['image', 'link']:
+        attr_column = db.Column(db.String(400))
+    elif attr in ['price', 'reviews_num']:
+        attr_column = db.Column(db.Integer)
+    elif attr == 'stars':
+        attr_column = db.Column(db.Float)
+    else:
+        attr_column = db.Column(db.String(120))
+    setattr(Result, attr, attr_column)
