@@ -42,6 +42,3 @@ def results():
     search_results = simple_search(item, SHOPS, nums)
 
     return render_template('results.html', item=item, shops=SHOPS, results=search_results)
-
-if __name__ == '__main__':
-    app.run()

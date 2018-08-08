@@ -5,25 +5,23 @@
     <h1>Search results for {{ item }}</h1>
     {% for shop in shops %}
     <h2>{{ shop }}</h2>
-    <table style="width:80%">
+    <table style="width:50%">
         <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Prices</th>
+            <th>Item</th>
+            <th></th>
+            <th>Price</th>
             <th>Stars</th>
-            <th>Reviews</th>
         </tr>
         {% for result in results[shop] %}
         <tr>
-            <td><a href="{{ result.link }}">{{ result.name }}</a></td>
+            <td width="20%"><a href="{{ result.link }}">{{ result.name }}</a></td>
             <td>
                 <div class="itemimage" >
-                    <img src="{{ result.image }}">
+                    <img class="{{ shop }}img" src="{{ result.image }}">
                 </div>
             </td>
-            <td>{{ result.price }}</td>
-            <td>{{ result.stars }}</td>
-            <td>{{ result.reviews_num }}</td>
+            <td width="10%">{{ result.price }}</td>
+            <td width="15%">{{ result.stars }} ({{ result.reviews_num }})</td>
         </tr>
         {% endfor %}
     </table>
