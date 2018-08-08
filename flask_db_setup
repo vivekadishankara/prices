@@ -1,0 +1,5 @@
+cd $(pwd)/api/
+export FLASK_APP=api.py
+flask db init
+flask db migrate -m "first migrate"
+flask db upgrade
