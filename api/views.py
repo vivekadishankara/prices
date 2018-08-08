@@ -13,9 +13,9 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/results1')
+@app.route('/results1', methods=['POST'])
 def results1():
-    item = 'Redmi 5'
+    item = request.form['q']
     try:
         pums = request.form['gums']
         print(pums)
