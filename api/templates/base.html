@@ -1,5 +1,10 @@
 {% extends "bootstrap/base.html" %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="shotcut icon" href="{{ url_for('static', filename='images/metalogo.ico') }}">
+{% endblock %}
+
 {% block title %}Metashopper{% endblock %}
 
 {% block styles %}

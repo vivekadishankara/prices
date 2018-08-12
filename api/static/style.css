@@ -2,6 +2,10 @@ h1 {
   color: #E9601A;
 }
 
+img.home {
+    padding-top:10%;
+}
+
 div.header {
     padding-top:20px;
 }
