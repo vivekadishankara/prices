@@ -1,6 +1,14 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
 
-{% block title %}Main{% endblock %}
+{% block title %}Home - Metashopper{% endblock %}
 {% block content %}
-    <h1>Welcome to MetaShopper</h1>
+    <center>
+        <h1>MetaShopper</h1>
+        <form role="form" action="{{ url_for('results') }}" method="post" name="search" >
+            {{ form.hidden_tag() }}
+            {{ form.item() }}
+            {{ form.results(size=4) }}
+            {{ form.submit() }}
+        </form>
+    </center>
 {% endblock %}

@@ -1,22 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MetaShopper</title>
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Metashopper{% endblock %}
+
+{% block styles %}
+    {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <form role="form" action="{{ url_for('results') }}" method="post" name="search" >
-        <label for="title" class="control-label col-sm-2">Item:</label>
-            <input type="text" name="q" required autofocus />
-        <label for="title" class="control-label col-sm-2">Results:</label>
-            <input type="number" name="nums" min="1" value="1" />
-        <button type="submit" name="startSearch" class="btn btn-primary">Search</button>
-    </form>
+{% endblock %}
+
+{% block content %}
+    <div class="header row">
+        <div class="col-sm-9" align="center">
+            <form role="form" action="{{ url_for('results') }}" method="post" name="search" >
+                {{ form.hidden_tag() }}
+                {{ form.item.label }}
+                {{ form.item() }}
+                {{ form.results.label }}
+                {{ form.results(size=4) }}
+                {{ form.submit() }}
+            </form>
+        </div>
+        <div class="col-sm-3" align="right">
+            MetaShopper: <a href="{{ url_for('home') }}">Home</a>
+        </div>
+    </div>
     <hr>
-    {% block content %}{% endblock %}
+    {% block api_content %}{% endblock %}
     <footer>
         &copy; 2018, vivekadishankara
     </footer>
-</body>
-</html>
+{% endblock %}

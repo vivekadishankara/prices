@@ -2,8 +2,8 @@ h1 {
   color: #E9601A;
 }
 
-form {
-    display:inline;
+div.header {
+    padding-top:20px;
 }
 
 img.Flipkartimg {
