@@ -3,7 +3,11 @@ h1 {
 }
 
 img.home {
-    padding-top:10%;
+    padding-top:6%;
+}
+
+footer {
+    padding-top: 15%;
 }
 
 div.header {
