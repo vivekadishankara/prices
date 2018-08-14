@@ -2,8 +2,16 @@ h1 {
   color: #E9601A;
 }
 
-form {
-    display:inline;
+img.home {
+    padding-top:6%;
+}
+
+footer {
+    padding-top: 15%;
+}
+
+div.header {
+    padding-top:20px;
 }
 
 img.Flipkartimg {

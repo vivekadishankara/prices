@@ -1,6 +1,30 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
 
-{% block title %}Main{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="shotcut icon" href="{{ url_for('static', filename='images/metalogo.ico') }}">
+{% endblock %}
+
+{% block title %}Home - Metashopper{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
 {% block content %}
-    <h1>Welcome to MetaShopper</h1>
+    <center>
+        <img class="home" src="{{ url_for('static', filename='images/metashopper.png') }}">
+        <form role="form" action="{{ url_for('results') }}" method="post" name="search" >
+            {{ form.hidden_tag() }}
+            {{ form.item() }}
+            {{ form.results(size=4) }}
+            {{ form.submit() }}
+        </form>
+    </center>
+    <footer>
+        <center>
+            &copy; 2018, vivekadishankara
+        </center>
+    </footer>
 {% endblock %}
