@@ -5,6 +5,7 @@ from metashopper.shopper import ITEM_ATTR
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     itemname = db.Column(db.String(64), index=True, unique=True)
+    itemtime = db.Column(db.String(20))
     results = db.relationship('Result', backref='search_item', lazy='dynamic')
 
     def __repr__(self):
