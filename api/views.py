@@ -86,6 +86,8 @@ def results_new():
 
     for shop, num_i in zip(SHOPS, nums):
         for i in range(num_i):
+            if not search_results.get(shop)[i]['stars']:
+                search_results.get(shop)[i]['stars'] = 0.0
             result_db = Result(shop=shop, search_item=it, **search_results.get(shop)[i])
             db.session.add(result_db)
 
