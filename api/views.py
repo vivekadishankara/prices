@@ -1,3 +1,4 @@
+from datetime import datetime
 from api import app
 from flask import render_template
 from flask import request, redirect, url_for
@@ -87,22 +88,25 @@ def results():
                     res[attr] = getattr(resf, attr)
                 shop_results.append(res)
             search_results[shop] = shop_results
+        itemtime = item_filter.itemtime
     else:
         return redirect(url_for('results_new'), code=307)  # code=307 for post method
-    return render_template('results.html', item=item, shops=SHOPS, results=search_results, form=form)
+    return render_template('results.html', item=item, itemtime=itemtime, shops=SHOPS, results=search_results, form=form)
 
 
 @app.route('/results_new', methods=['POST'])
 def results_new():
     form = SearchForm()
     item, num, nums = form.get_search_items()
+    now_time = datetime.now().strftime("%Y-%m-%d %H:%M")
     search_results = simple_search(item, SHOPS, nums)
     it = Item.query.filter_by(itemname=item).first()
     if it:
         it.results.delete()
+        it.itemtime = now_time
         db.session.commit()
     else:
-        it = Item(itemname=item)
+        it = Item(itemname=item, itemtime=now_time)
         db.session.add(it)
         db.session.commit()
 
