@@ -1,4 +1,0 @@
-cd $(pwd)/api
-rm -r migrations
-rm app.db
-unset FLASK_APP
