@@ -1,3 +1,6 @@
+"""
+This class contains the various tests for verifying different functionalities
+"""
 import os
 import pytest
 from pylint import epylint as lint
@@ -18,7 +21,15 @@ def price_fixture():
 
 
 class TestCode(object):
+    """
+    This class checks the code quality
+    """
     def test_pylint_review(self):
+        """
+        This method lints the entire code. It requires that the pylint output does not have an error
+        and the pylint score to be greater than 5.0
+        :return: None
+        """
         lint_stdout, lint_stderr = lint.py_run('..', return_std=True)
         for line in lint_stdout:
             if not line.isspace():
@@ -31,8 +42,16 @@ class TestCode(object):
 
 #@pytest.mark.usefixtures('price_fixture')
 class TestPrice(object):
+    """
+    This class verifies the framework functionalities
+    """
     @pytest.mark.parametrize('item', (['Redmi 5']))
     def test_search_basic(self, item):
+        """
+        This method tests the search functionality of the framework for all the shops for a given item
+        :param item: item to be searched in the shops
+        :return: writes the results into a file named 'results'
+        """
         item_num = configuration.SEARCH_RESERVE
         fp = 'results'
         with open(fp, 'w') as f, driver:
@@ -48,7 +67,14 @@ class TestPrice(object):
 
 
 class TestApi(object):
+    """
+    This class tests the functionalities of the api
+    """
     def test_db(self):
+        """
+        This method verifies the database functionalities of the api
+        :return: None
+        """
         item = 'Redmi 5'
         fp = 'results'
         if not os.path.exists(fp):
