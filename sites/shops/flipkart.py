@@ -4,12 +4,12 @@ from framework.shop import ShopResults, Shop
 class FlipkartResults(ShopResults):
     results = ShopResults.element_by_attr_partial('data-tkid', 'SEARCH', True)
     results.set_sub_elements(
-        name="//a[2]",
-        image="//a//img",
-        price="//a[3]/div/div",
-        stars="//span[contains(@id, 'productRating')]/div",  #example: '4.2 *'
-        reviews_num="//div[2]/span[2]",    #example: (3,19,899)
-        link="//a[2]"
+        name="//*[contains(@class, '_3wU53n') or contains(@class,'_2cLu-l')]",
+        image="//img[contains(@class,'_1Nyybr')]",
+        price="//div[contains(@class, '_1vC4OE')]",
+        stars="//span[contains(@id, 'productRating')]/div",  # example: '4.2 *'
+        reviews_num="//span[contains(@class, '_38sUEc')]",    # example: (3,19,899)
+        link="//a"
     )
     next_page_link = ShopResults.text_element('Next')
 
@@ -30,8 +30,10 @@ class FlipkartResults(ShopResults):
     @classmethod
     def get_result_reviews_num(cls, element):
         num_text = super(FlipkartResults, cls).get_result_reviews_num(element)
+        num_text = num_text.split()[0]
+        num_text = num_text.replace('(', '').replace(')', '')
         if num_text:
-            return int(num_text[1:-1])
+            return int(num_text)
         return num_text
 
 
