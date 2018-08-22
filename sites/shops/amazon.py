@@ -7,7 +7,7 @@ class AmazonResults(ShopResults):
         name="//h2",
         image="//*[@class='s-access-image cfMarker']",
         price="//*[contains(@class,'s-price')]",
-        stars="//*[contains(@class,'a-icon-star')]/span",  #example: 4.2 out of 5 stars
+        stars="//*[contains(@class,'a-icon-star')]/span",  # example: 4.2 out of 5 stars
         reviews_num="//*[contains(@class,'a-icon-star')]/following::a",
         link="//*[contains(@class,'s-access-detail-page')]"
     )
@@ -24,7 +24,9 @@ class AmazonResults(ShopResults):
     def get_result_price(cls, element):
         price_text = super(AmazonResults, cls).get_result_price(element)
         if price_text:
-            return int(price_text)
+            if '-' in price_text:
+                price_text = price_text.split('-')[0]
+            return int(float(price_text))
         return price_text
 
     @classmethod

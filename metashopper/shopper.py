@@ -1,8 +1,8 @@
 from framework.driver import driver
 from framework.shop import ShopResults
-from sites.shops.amazon.home import Amazon
-from sites.shops.flipkart.home import Flipkart
-from sites.shops.snapdeal.home import Snapdeal
+from sites.shops.amazon import Amazon
+from sites.shops.flipkart import Flipkart
+from sites.shops.snapdeal import Snapdeal
 
 
 SHOPS = {'Amazon': Amazon,

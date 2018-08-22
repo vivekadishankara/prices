@@ -8,7 +8,7 @@ class SnapdealResults(ShopResults):
         image="//img[contains(@class,'product-image')]",
         price="//span[contains(@class,'product-price')]",
         stars="//*[@class='rating-stars ']",
-        reviews_num="//*[contains(@class,'product-rating-count')]", #example: (3)
+        reviews_num="//*[contains(@class,'product-rating-count')]",  # example: (3)
         link="//*[contains(@class,'product-title')]/parent::a"
     )
     see_more_link = ShopResults.element_by_id('see-more-products')

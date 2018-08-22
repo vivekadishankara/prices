@@ -1,3 +1,4 @@
+from datetime import datetime
 from api import db
 from metashopper.shopper import ITEM_ATTR
 
@@ -7,6 +8,12 @@ class Item(db.Model):
     itemname = db.Column(db.String(64), index=True, unique=True)
     itemtime = db.Column(db.String(20))
     results = db.relationship('Result', backref='search_item', lazy='dynamic')
+
+    def __init__(self, *args, **kwargs):
+        super(Item, self).__init__(*args, **kwargs)
+        if not 'itemtime' in kwargs.keys():
+            self.itemtime = datetime.now().strftime("%Y-%m-%d %H:%M")
+
 
     def __repr__(self):
         return '<Item {}>'.format(self.itemname)
