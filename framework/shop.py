@@ -5,21 +5,26 @@ All shops need to inherit and make use of these classes
 from framework.page import PrePage, Results, Page
 
 
+RESULT_SUB_ELEMENTS = ['name', 'image', 'price', 'stars', 'reviews_num', 'link']
+
+
 class ShopResults(Results):
     """
     This class maps the search results page of the shop.
     For the results Elements instance, sub elements need to be set and
     corresponding get_result_key function needs to be defined
     """
-    results = Results.element_by_xpath('', True)
-    results.set_sub_elements(
-        name="",
-        image="",
-        price="",
-        stars="",
-        reviews_num="",
-        link=""
-    )
+    def __init__(self, driver):
+        super(ShopResults, self).__init__(driver)
+        self.results = self.element_by_xpath('', True)
+        self.results.set_sub_elements(
+            name="",
+            image="",
+            price="",
+            stars="",
+            reviews_num="",
+            link=""
+        )
 
     @staticmethod
     def get_result_link(element):
@@ -95,11 +100,12 @@ class Shop(Page):
     """
     Home pages of all shops inherit from this class
     """
-    results_page = ShopResults()
-    product_page = Product()
+    def __init__(self, driver):
+        super(Shop, self).__init__(driver)
+        self.results_page = ShopResults(driver)
+        self.product_page = Product(driver)
 
-    @classmethod
-    def get_result_info(cls, result):
+    def get_result_info(self, result):
         """
         Collects the information from a result and returns as a dictionary
         :param result: result from the results_page
@@ -109,26 +115,25 @@ class Shop(Page):
         result.find_element().location_once_scrolled_into_view
         for key in result.sub_elements.keys():
             element = result.get_sub_element(key)
-            info[key] = getattr(cls.results_page, 'get_result_' + key)(element)
+            info[key] = getattr(self.results_page, 'get_result_' + key)(element)
             if not info.get(key):
                 info[key] = ''
         return info
 
-    @classmethod
-    def search_results(cls, item, num=None):
-        cls.search(item)
+    def search_results(self, item, num=None):
+        self.search(item)
         results_info = []
         while True:
-            for result in cls.results_page.results(num):
-                info = cls.get_result_info(result)
+            for result in self.results_page.results(num):
+                info = self.get_result_info(result)
                 results_info.append(info)
                 if len(results_info) >= num:
-                    cls.results_page.results.set_i()
+                    self.results_page.results.set_i()
                     return results_info
-            if cls.results_page.next_page_link.locator:
-                cls.results_page.results.set_i()
-                if not cls.results_page.next_page_link.click():
+            if self.results_page.next_page_link.locator:
+                self.results_page.results.set_i()
+                if not self.results_page.next_page_link.click():
                     break
-            elif cls.results_page.see_more_link.locator:
-                if not cls.results_page.see_more_link.click():
+            elif self.results_page.see_more_link.locator:
+                if not self.results_page.see_more_link.click():
                     break

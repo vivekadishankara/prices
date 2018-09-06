@@ -1,5 +1,5 @@
-from framework.driver import driver
-from framework.shop import ShopResults
+from framework.driver import Driver
+from framework.shop import RESULT_SUB_ELEMENTS
 from sites.shops.amazon import Amazon
 from sites.shops.flipkart import Flipkart
 from sites.shops.snapdeal import Snapdeal
@@ -8,15 +8,15 @@ from sites.shops.snapdeal import Snapdeal
 SHOPS = {'Amazon': Amazon,
          'Flipkart': Flipkart,
          'Snapdeal': Snapdeal}
-ITEM_ATTR = ShopResults.results.sub_elements.keys()
 
 
 def simple_search(item, shops, nums):
     results = {}
-    with driver:
+    driver = Driver()
+    with driver as d:
         for shop, num in zip(shops, nums):
-            shopclass = SHOPS[shop]
-            shopclass.navigate()
-            result = shopclass.search_results(item, num)
+            shopobj = SHOPS[shop](d)
+            shopobj.navigate()
+            result = shopobj.search_results(item, num)
             results[shop] = result
     return results

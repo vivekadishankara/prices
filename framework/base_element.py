@@ -8,17 +8,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException, TimeoutException
 from selenium.webdriver.common.by import By
 from configuration import TIMEOUT
-from framework.driver import driver
+from framework.driver import driver as global_driver
 
 
 class Element(object):
     """
     An instance of this class maps an element on the page. It wraps around the Selenium Webdriver class.
     """
-    def __init__(self, by, locator, timeout=TIMEOUT):
+    def __init__(self, by, locator, timeout=TIMEOUT, driver=global_driver):
         self.by = by
         self.locator = locator
         self.timeout = timeout
+        self.driver = driver
 
     def set_timeout(self, timeout=TIMEOUT):
         """
@@ -51,7 +52,7 @@ class Element(object):
         if self.by == By.XPATH:
             try:
                 locator = self.locator + self.sub_elements.get(sub)
-                sub_element = Element(self.by, locator)
+                sub_element = Element(self.by, locator, driver=self.driver)
                 return sub_element
             except AttributeError:
                 pass
@@ -75,7 +76,7 @@ class Element(object):
         :return: Webdriver element
         """
         try:
-            element = driver.find_element(self.by, self.locator)
+            element = self.driver.find_element(self.by, self.locator)
             return element
         except Exception as exception:
             return exception
@@ -87,7 +88,7 @@ class Element(object):
         :return: list of Webdriver elements
         """
         try:
-            elements = driver.find_elements(self.by, self.locator)
+            elements = self.driver.find_elements(self.by, self.locator)
             return elements
         except Exception as exception:
             return exception
@@ -112,7 +113,7 @@ class Element(object):
         if not timeout:
             timeout = self.timeout
         try:
-            element = WebDriverWait(driver.get_driver(), timeout).until(EC.visibility_of_element_located(
+            element = WebDriverWait(self.driver.get_driver(), timeout).until(EC.visibility_of_element_located(
                 (self.by, self.locator)))
         except TimeoutException as exception:
             if ret:
@@ -133,7 +134,7 @@ class Element(object):
         if not timeout:
             timeout = self.timeout
         try:
-            element = WebDriverWait(driver.get_driver(), timeout).until(EC.visibility_of_all_elements_located((
+            element = WebDriverWait(self.driver.get_driver(), timeout).until(EC.visibility_of_all_elements_located((
                 self.by, self.locator)))
         except TimeoutException as exception:
             if ret:
@@ -153,7 +154,7 @@ class Element(object):
         if not timeout:
             timeout = self.timeout
         try:
-            element = WebDriverWait(driver.get_driver(), timeout).until(EC.element_to_be_clickable(
+            element = WebDriverWait(self.driver.get_driver(), timeout).until(EC.element_to_be_clickable(
                 (self.by, self.locator)))
         except TimeoutException as exception:
             if ret:
@@ -238,8 +239,8 @@ class Elements(Element):
     Each instance of the repeated element is characterized by an indexed XPATH.
     Hence the self.by is By.XPATH by default
     """
-    def __init__(self, xpath, timeout=TIMEOUT):
-        super(Elements, self).__init__(By.XPATH, xpath, timeout)
+    def __init__(self, xpath, timeout=TIMEOUT, driver=global_driver):
+        super(Elements, self).__init__(By.XPATH, xpath, timeout, driver)
         self.i = 0
         self.num = None
 
@@ -261,7 +262,7 @@ class Elements(Element):
 
     def __getitem__(self, item):
         locator_item = '(' + self.locator + ')[' + str(item) + ']'
-        element = Element(self.by, locator_item, self.timeout)
+        element = Element(self.by, locator_item, self.timeout, self.driver)
         try:
             if self.sub_elements is not None:
                 element.set_sub_elements(**self.sub_elements)

@@ -18,6 +18,7 @@ class Driver(object):
         self.path = path_to_executable
         self.headless = headless
         self.pageLoadStrategy = pageLoadStrategy
+        self.driver = None
 
     def start_driver(self):
         """
@@ -171,6 +172,7 @@ class Driver(object):
 
     def __enter__(self):
         self.start_driver()
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.quit()
