@@ -14,10 +14,7 @@ class ShopResults(Results):
     For the results Elements instance, sub elements need to be set and
     corresponding get_result_key function needs to be defined
     """
-    def __init__(self, driver):
-        super(ShopResults, self).__init__(driver)
-        self.results = self.element_by_xpath('', True)
-        self.results.set_sub_elements(
+    sub_element_locators = dict(
             name="",
             image="",
             price="",
@@ -25,6 +22,10 @@ class ShopResults(Results):
             reviews_num="",
             link=""
         )
+
+    def __init__(self, driver):
+        super(ShopResults, self).__init__(driver)
+        self.results.set_sub_elements(**self.sub_element_locators)
 
     @staticmethod
     def get_result_link(element):
@@ -102,8 +103,10 @@ class Shop(Page):
     """
     def __init__(self, driver):
         super(Shop, self).__init__(driver)
-        self.results_page = ShopResults(driver)
-        self.product_page = Product(driver)
+
+        if self.__class__ == Shop:
+            self.results_page = ShopResults(driver)
+            self.product_page = Product(driver)
 
     def get_result_info(self, result):
         """

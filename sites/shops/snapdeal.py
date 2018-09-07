@@ -2,10 +2,8 @@ from framework.shop import ShopResults, Product, Shop
 
 
 class SnapdealResults(ShopResults):
-    def __init__(self, driver, shop):
-        super(SnapdealResults, self).__init__(driver)
-        self.results = self.element_by_attr_partial('class', 'product-tuple-listing', True)
-        self.results.set_sub_elements(
+    results_locator = ('class', 'product-tuple-listing', True)
+    sub_element_locators = dict(
             name="//*[contains(@class,'product-title')]",
             image="//img[contains(@class,'product-image')]",
             price="//span[contains(@class,'product-price')]",
@@ -13,7 +11,13 @@ class SnapdealResults(ShopResults):
             reviews_num="//*[contains(@class,'product-rating-count')]",  # example: (3)
             link="//*[contains(@class,'product-title')]/parent::a"
         )
-        self.see_more_link = self.element_by_id('see-more-products')
+    see_more_link_locator = 'see-more-products'
+
+    def __init__(self, driver, shop):
+        super(SnapdealResults, self).__init__(driver)
+        self.results = self.element_by_attr_partial(*self.results_locator)
+        self.results.set_sub_elements(**self.sub_element_locators)
+        self.see_more_link = self.element_by_id(self.see_more_link_locator)
         self.shop = shop
 
     def get_result_stars(self, element):
@@ -42,17 +46,23 @@ class SnapdealResults(ShopResults):
 
 
 class SnapdealProduct(Product):
+    stars_locators = '//*[@ratings]'
+
     def __init__(self, driver):
         super(SnapdealProduct, self).__init__(driver)
-        self.stars = self.element_by_xpath('//*[@ratings]')
+        self.stars = self.element_by_xpath(self.stars_locators)
 
 
 class Snapdeal(Shop):
+    url = 'https://www.snapdeal.com/'
+    search_box_locator = 'inputValEnter'
+    search_button_locator = ('class', 'searchformButton')
+
     def __init__(self, driver):
         super(Snapdeal, self).__init__(driver)
-        self.url = 'https://www.snapdeal.com/'
-        self.search_box = self.element_by_id('inputValEnter')
-        self.search_button = self.element_by_attr_partial('class', 'searchformButton')
+        self.search_box = self.element_by_id(self.search_box_locator)
+        self.search_button = self.element_by_attr_partial(*self.search_button_locator)
 
-        self.results_page = SnapdealResults(driver, self)
-        self.product_page = SnapdealProduct(driver)
+        if self.__class__ == Snapdeal:
+            self.results_page = SnapdealResults(driver, self)
+            self.product_page = SnapdealProduct(driver)

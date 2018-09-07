@@ -1,7 +1,7 @@
 from sites.shops.amazon import Amazon
 from sites.shops.snapdeal import Snapdeal
 from sites.shops.flipkart import Flipkart
-from framework.driver import Driver, driver
+from framework.driver import Driver
 
 
 item = 'Redmi 5'

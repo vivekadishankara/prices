@@ -2,10 +2,9 @@ from framework.shop import ShopResults, Shop
 
 
 class AmazonResults(ShopResults):
-    def __init__(self, driver):
-        super(AmazonResults, self).__init__(driver)
-        self.results = self.element_by_xpath("//div[@class='s-item-container']", True)
-        self.results.set_sub_elements(
+    results_locator = "//div[@class='s-item-container']"
+    next_page_link_locator = 'pagnNextString'
+    sub_element_locators = dict(
             name="//h2",
             image="//*[@class='s-access-image cfMarker']",
             price="//*[contains(@class,'s-price')]",
@@ -13,7 +12,10 @@ class AmazonResults(ShopResults):
             reviews_num="//*[contains(@class,'a-icon-star')]/following::a",
             link="//*[contains(@class,'s-access-detail-page')]"
         )
-        self.next_page_link = self.element_by_id('pagnNextString')
+
+    def __init__(self, driver):
+        super(AmazonResults, self).__init__(driver)
+        self.next_page_link = self.element_by_id(self.next_page_link_locator)
 
     def get_result_stars(self, element):
         stars_text = super(AmazonResults, self).get_result_stars(element)
@@ -37,10 +39,14 @@ class AmazonResults(ShopResults):
 
 
 class Amazon(Shop):
+    url = 'http://www.amazon.in'
+    search_box_locator = 'twotabsearchtextbox'
+    search_button_locator = ('value', 'Go')
+
     def __init__(self, driver):
         super(Amazon, self).__init__(driver)
-        self.url = 'http://www.amazon.in'
-        self.search_box = self.element_by_id('twotabsearchtextbox')
-        self.search_button = self.element_by_attr('value', 'Go')
+        self.search_box = self.element_by_id(self.search_box_locator)
+        self.search_button = self.element_by_attr(*self.search_button_locator)
 
-        self.results_page = AmazonResults(driver)
+        if self.__class__ == Amazon:
+            self.results_page = AmazonResults(driver)

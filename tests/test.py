@@ -4,7 +4,7 @@ This class contains the various tests for verifying different functionalities
 import os
 import pytest
 from pylint import epylint as lint
-from framework.driver import driver
+from framework.driver import Driver
 import configuration
 from sites.shops.amazon import Amazon
 from sites.shops.flipkart import Flipkart
@@ -68,8 +68,10 @@ class TestPrice(object):
         """
         item_num = configuration.SEARCH_RESERVE
         fp = 'results'
-        with open(fp, 'w') as f, driver:
-            for shop in [Amazon, Flipkart, Snapdeal]:
+        driver = Driver()
+        with open(fp, 'w') as f, driver as d:
+            for Shop in [Amazon, Flipkart, Snapdeal]:
+                shop = Shop(d)
                 shop.navigate()
                 results = []
                 for result in shop.search_results(item, item_num):
@@ -90,13 +92,15 @@ class TestPrice(object):
         """
         item_num = configuration.SEARCH_RESERVE
         fp = 'results1'
-        with open(fp, 'w') as f, driver:
-            shop.navigate()
+        driver = Driver()
+        with open(fp, 'w') as f, driver as d:
+            shopobj = shop(d)
+            shopobj.navigate()
             results = []
-            for result in shop.search_results(item, item_num):
+            for result in shopobj.search_results(item, item_num):
                 f.write(str(result) + '\n')
                 results.append(result)
-                for sub in shop.results_page.results.sub_elements:
+                for sub in shopobj.results_page.results.sub_elements:
                     assert result.get(sub) is not None
             assert len(results) == item_num
 

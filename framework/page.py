@@ -63,11 +63,15 @@ class Results(PrePage):
     """
     This class maps the result page that appears after carrying out a search on a page
     """
+    results_locator = ''
+    next_page_link_locator = ''
+    see_more_link_locator = ''
+
     def __init__(self, driver):
         super(Results, self).__init__(driver)
-        self.results = self.element_by_xpath('', True)
-        self.next_page_link = self.element_by_xpath('')
-        self.see_more_link = self.element_by_xpath('')
+        self.results = self.element_by_xpath(self.results_locator, True)
+        self.next_page_link = self.element_by_xpath(self.next_page_link_locator)
+        self.see_more_link = self.element_by_xpath(self.see_more_link_locator)
 
 
 class Page(PrePage):
@@ -75,13 +79,17 @@ class Page(PrePage):
     Page class for the Page object model.
     All home pages inherit from this class
     """
+    url = ''
+    search_box_locator = ''
+    search_button_locator = ''
+
     def __init__(self, driver):
         super(Page, self).__init__(driver)
-        self.url = ''
-        self.search_box = self.element_by_xpath('')
-        self.search_button = self.element_by_xpath('')
+        self.search_box = self.element_by_xpath(self.search_box_locator)
+        self.search_button = self.element_by_xpath(self.search_button_locator)
 
-        self.results_page = Results(driver)
+        if self.__class__ == Page:
+            self.results_page = Results(driver)
 
     def navigate(self):
         """
