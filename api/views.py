@@ -7,7 +7,7 @@ from api import db
 from api.models import Item, Result
 
 from api.forms import SearchForm
-from metashopper.shopper import simple_search, ITEM_ATTR
+from metashopper.shopper import simple_search, RESULT_SUB_ELEMENTS
 
 
 SHOPS = ['Amazon', 'Flipkart', 'Snapdeal']
@@ -84,7 +84,7 @@ def results():
             shop_results = []
             for resf in results_filter[:num]:
                 res = {}
-                for attr in ITEM_ATTR:
+                for attr in RESULT_SUB_ELEMENTS:
                     res[attr] = getattr(resf, attr)
                 shop_results.append(res)
             search_results[shop] = shop_results

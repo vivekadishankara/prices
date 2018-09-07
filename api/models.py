@@ -1,6 +1,6 @@
 from datetime import datetime
 from api import db
-from metashopper.shopper import ITEM_ATTR
+from metashopper.shopper import RESULT_SUB_ELEMENTS
 
 
 class Item(db.Model):
@@ -28,7 +28,7 @@ class Result(db.Model):
         return '<Result:\n{}\n{}\n>'.format(self.shop, self.price)
 
 
-for attr in ITEM_ATTR:
+for attr in RESULT_SUB_ELEMENTS:
     if attr == 'name':
         attr_column = db.Column(db.String(64))
     elif attr in ['image', 'link']:
